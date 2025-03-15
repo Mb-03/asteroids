@@ -4,10 +4,10 @@ from circleshape import CircleShape
 from player import Player
 
 
-class Player(CircleShape):
-    def __init__(self, x, y):
-        super().__init__(x, y, PLAYER_RADIUS)
-        self.rotation = 0
+update_group = pygame.sprite.Group()
+draw_group = pygame.sprite.Group()
+
+Player.containers = (update_group, draw_group)
 
 
 def main():
@@ -17,12 +17,14 @@ def main():
     clock = pygame.time.Clock()
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     while 1 == 1:
-        # print(player.triangle())
         for event in pygame.event.get():
             if event.type == pygame.QUIT:       
                 return
         screen.fill("black")
-        player.draw(screen)
+        for entity in update_group:
+            entity.update(dt)
+        for entity in draw_group:
+            entity.draw(screen)
         pygame.display.flip()
         dt = clock.tick(60) / 1000
     print("Starting Asteroids!")
